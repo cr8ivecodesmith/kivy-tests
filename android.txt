@@ -1,0 +1,3 @@
+title=Kivy Tests
+author=Matt Lebrun
+orientation=auto
