@@ -1,8 +1,6 @@
 import kivy
 kivy.require('1.9.0')
 
-import pdb
-
 from kivy.app import App
 from kivy.base import EventLoop
 from kivy.clock import Clock
@@ -76,10 +74,10 @@ class ConEmu(Widget):
         self.player.x, self.player.y = px, py
 
         self.con.put_text('nap: {:.4f}'.format(nap), pos=(1, 1))
-        self.con.put_text('player coord: ({},{})'.format(
-            self.player.x, self.player.y), pos=(1, 2))
         self.con.put_text('screen size: {}'.format(
-            SCREEN_SIZE), pos=(1, 3))
+            SCREEN_SIZE), pos=(1, 2))
+        self.con.put_text('player coord: ({}, {})'.format(
+            self.player.x, self.player.y), pos=(1, 4))
 
         self.con.flush()
 
