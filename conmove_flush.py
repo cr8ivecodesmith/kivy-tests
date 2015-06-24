@@ -4,7 +4,7 @@ kivy.require('1.9.0')
 from kivy.app import App
 from kivy.base import EventLoop
 from kivy.clock import Clock
-from kivy.core.window import Window
+from kivy.core.window import Window, Keyboard
 from kivy.uix.widget import Widget
 
 from console import Console
@@ -48,6 +48,8 @@ class Sprite(object):
 
 class ConEmu(Widget):
     def initialize(self):
+        Window.bind(on_key_down=self.on_key_down)
+
         self.add_widget(Con(
             id='con',
             screen_size=SCREEN_SIZE,
@@ -70,9 +72,6 @@ class ConEmu(Widget):
         self.player = self.con.get_sprite('player')
 
     def update(self, nap):
-        px, py = Window.mouse_pos
-        self.player.x, self.player.y = px, py
-
         self.con.put_text('nap: {:.4f}'.format(nap), pos=(1, 1))
         self.con.put_text('screen size: {}'.format(
             SCREEN_SIZE), pos=(1, 2))
@@ -85,6 +84,29 @@ class ConEmu(Widget):
         for obj in self.walk(restrict=restrict, loopback=loopback):
             if obj.id == widget_id:
                 return obj
+
+    def on_key_down(self, window, key, *args):
+        code = Keyboard.keycodes
+        if code['h'] == key or code['left'] == key:
+            self.player.x -= 1
+        elif code['l'] == key or code['right'] == key:
+            self.player.x += 1
+        elif code['k'] == key or code['up'] == key:
+            self.player.y += 1
+        elif code['j'] == key or code['down'] == key:
+            self.player.y -= 1
+        elif code['y'] == key:
+            self.player.x -= 1
+            self.player.y += 1
+        elif code['b'] == key:
+            self.player.x -= 1
+            self.player.y -= 1
+        elif code['u'] == key:
+            self.player.x += 1
+            self.player.y += 1
+        elif code['n'] == key:
+            self.player.x += 1
+            self.player.y -= 1
 
 
 class ConEmuApp(App):
