@@ -85,15 +85,22 @@ class Console(Widget):
     def max_indice(self):
         return max(self._indices) + 1 if self._indices else 0
 
+    def get_pixel_pos(self, pos, is_bg=False):
+        font_w, font_h = self.font_size
+        tx, ty = pos
+        w, h = font_w * 0.5, font_h * 0.5
+        x, y = (tx * font_w) + w, (ty * font_h) + h
+
+        if is_bg:
+            x, y = tx * font_w, ty * font_h
+
+        return x, y
+
     def console_bg_color(self):
         self.put_rect((0, 0), self.screen_size, self.bg_color)
 
     def put_char(self, char, pos, color=None):
-        font_w, font_h = self.font_size
-        tx, ty = pos
-
-        w, h = font_w * 0.5, font_h * 0.5
-        x, y = (tx * font_w) + w, (ty * font_h) + h
+        x, y = self.get_pixel_pos(pos)
 
         r, g, b = color or self.fg_color
         idx = self.max_indice
@@ -112,8 +119,7 @@ class Console(Widget):
 
     def put_bg_color(self, pos, color):
         font_w, font_h = self.font_size
-        tx, ty = pos
-        x, y = tx * font_w, ty * font_h
+        x, y = self.get_pixel_pos(pos, is_bg=True)
 
         r, g, b = color
         idx = self.max_indice
@@ -130,7 +136,6 @@ class Console(Widget):
         ))
 
     def put_text(self, text, pos, color=None, wrap=None):
-        font_w, font_h = self.font_size
         x, y = pos
         start_x = x
         ctr = 0
@@ -150,8 +155,7 @@ class Console(Widget):
     def put_rect(self, pos, size, color):
         font_w, font_h = self.font_size
         w, h = size
-        tx, ty = pos
-        x, y = tx * font_w, ty * font_h
+        x, y = self.get_pixel_pos(pos, is_bg=True)
 
         r, g, b = color
         idx = self.max_indice
