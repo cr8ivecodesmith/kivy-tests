@@ -167,16 +167,9 @@ class Console(Widget):
             idx + 2, idx + 3, idx
         ))
 
-    def flush(self, reset=True):
+    def flush(self):
         self.canvas.clear()
         with self.canvas:
             Mesh(fmt=self._vfmt, mode='triangles',
                  indices=self._indices, vertices=self._vertices,
                  texture=self.font_tex)
-
-        if reset:
-            self.reset_shader()
-
-    def reset_shader(self):
-        self._vertices = []
-        self._indices = []
