@@ -10,7 +10,7 @@ from kivy.uix.widget import Widget
 from console import Console
 
 
-SCREEN_SIZE = (80, 50)
+SCREEN_SIZE = (100, 50)
 
 
 class Con(Console):
@@ -75,8 +75,11 @@ class ConEmu(Widget):
         self.con.put_text('nap: {:.4f}'.format(nap), pos=(1, 1))
         self.con.put_text('screen size: {}'.format(
             SCREEN_SIZE), pos=(1, 2))
+        self.con.put_text('player pixel pos: {}'.format(
+            self.con.get_pixel_pos((self.player.x, self.player.y))),
+            pos=(1, 4))
         self.con.put_text('player coord: ({}, {})'.format(
-            self.player.x, self.player.y), pos=(1, 4))
+            self.player.x, self.player.y), pos=(1, 5))
 
         self.con.flush()
 
@@ -87,24 +90,34 @@ class ConEmu(Widget):
 
     def on_key_down(self, window, key, *args):
         code = Keyboard.keycodes
-        if code['h'] == key or code['left'] == key:
+        if (code['h'] == key or code['left'] == key) and self.player.x > 0:
             self.player.x -= 1
-        elif code['l'] == key or code['right'] == key:
+        elif ((code['l'] == key or code['right'] == key)
+              and self.player.x < SCREEN_SIZE[0] - 1):
             self.player.x += 1
-        elif code['k'] == key or code['up'] == key:
+        elif ((code['k'] == key or code['up'] == key)
+              and self.player.y < SCREEN_SIZE[1] - 1):
             self.player.y += 1
-        elif code['j'] == key or code['down'] == key:
+        elif (code['j'] == key or code['down'] == key) and self.player.y > 0:
             self.player.y -= 1
-        elif code['y'] == key:
+        elif (code['y'] == key
+              and self.player.x > 0
+              and self.player.y < SCREEN_SIZE[1] - 1):
             self.player.x -= 1
             self.player.y += 1
-        elif code['b'] == key:
+        elif (code['b'] == key
+              and self.player.x > 0
+              and self.player.y > 0):
             self.player.x -= 1
             self.player.y -= 1
-        elif code['u'] == key:
+        elif (code['u'] == key
+              and self.player.x < SCREEN_SIZE[0] - 1
+              and self.player.y < SCREEN_SIZE[1] - 1):
             self.player.x += 1
             self.player.y += 1
-        elif code['n'] == key:
+        elif (code['n'] == key
+              and self.player.x < SCREEN_SIZE[0] - 1
+              and self.player.y > 0):
             self.player.x += 1
             self.player.y -= 1
 
