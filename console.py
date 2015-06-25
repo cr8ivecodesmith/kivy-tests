@@ -96,6 +96,17 @@ class Console(Widget):
 
         return x, y
 
+    def get_console_pos(self, pos):
+        # TODO: Assuming that the pos coords could be referring to any pixel
+        #       within the font size, I need to get the relative bottom right
+        #       coords and use that for the tx, ty values instead. This will
+        #       increase the accuracy of the translation.
+        font_w, font_h = self.font_size
+        tx, ty = pos
+        x, y = tx / font_w, ty / font_h
+
+        return round(x, 0), round(y, 0)
+
     def console_bg_color(self):
         self.put_rect((0, 0), self.screen_size, self.bg_color)
 
